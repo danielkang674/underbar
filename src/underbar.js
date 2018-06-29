@@ -195,7 +195,7 @@
         if(accumulator === undefined){
           accumulator = collection[key];
         } else {
-          iterator(accumulator, collection[key]);
+          accumulator = iterator(accumulator, collection[key]);
         }
       }
     }
@@ -218,6 +218,13 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    iterator = iterator === undefined? _.identity : iterator;
+    return _.reduce(collection, function(isTrue, item){
+      if(!isTrue){
+        return false;
+      }
+      return iterator(item)? true : false;
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is

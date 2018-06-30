@@ -363,13 +363,10 @@
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
     let tempArray = array.slice();
-    let obj = {};
     let newArray = [];
-    for(let value of tempArray){
-      obj[value] = value;
-    }
-    for(let key in obj){
-      newArray.push(obj[key]);
+    while(tempArray.length > 0){
+      let tempSplice = tempArray.splice(Math.floor(Math.random() * Math.floor(tempArray.length -1) ),1)
+      newArray = newArray.concat(tempSplice);
     }
     return newArray;
   };

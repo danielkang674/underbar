@@ -231,6 +231,11 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    iterator = iterator === undefined ? _.identity : iterator;
+    for(let item of collection){
+      if(iterator(item)) return true;
+    }
+    return false;
   };
 
 
@@ -253,11 +258,25 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    let arrayOfObjs = [].slice.call(arguments, 1);
+    for(let object of arrayOfObjs){
+      for(let key in object){
+        obj[key] = object[key];
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    let arrayOfObjs = [].slice.call(arguments, 1);
+    for(let object of arrayOfObjs){
+      for(let key in object){
+        obj[key] = obj[key] !== undefined? obj[key] : object[key];
+      }
+    }
+    return obj;
   };
 
 
@@ -301,6 +320,24 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    let memo = {};
+    
+    return function inner(){
+      let tempArgs = [];
+      for(let i = 0; i < arguments.length; i++){
+        tempArgs.push(arguments[i]);
+      }
+      let args = "";
+      for(let value of tempArgs){
+        args+=value+"&";
+      }
+      if(memo[args] === undefined){
+        memo[args] = func.apply(this, tempArgs);
+        return memo[args];
+      } else {
+        return memo[args];
+      }
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls

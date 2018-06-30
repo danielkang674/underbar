@@ -323,17 +323,12 @@
     let memo = {};
     
     return function inner(){
-      let tempArgs = [];
-      for(let i = 0; i < arguments.length; i++){
-        tempArgs.push(arguments[i]);
-      }
       let args = "";
-      for(let value of tempArgs){
+      for(let value of arguments){
         args+=value+"&";
       }
       if(memo[args] === undefined){
-        memo[args] = func.apply(this, tempArgs);
-        return memo[args];
+        return memo[args] = func.apply(this, arguments);
       } else {
         return memo[args];
       }
